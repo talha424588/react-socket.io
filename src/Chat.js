@@ -3,8 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 
-const socket = io('http://localhost:3000');
-
+const socket = io('http://localhost:3000', {
+    auth: {
+      token: localStorage.getItem('sanctum-token')
+    }
+  });
 const Chat = () => {
     const [message, setMessage] = useState('');
     const [chat, setChat] = useState([]);
