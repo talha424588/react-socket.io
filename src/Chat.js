@@ -14,6 +14,7 @@ const Chat = () => {
     const [chat, setChat] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false); // For loading more messages
     const chatBoxRef = useRef(null);
     const userData = JSON.parse(localStorage.getItem('userData'));
 
@@ -24,6 +25,8 @@ const Chat = () => {
                 console.error('No auth token found');
                 return;
             }
+
+            setLoading(true); // Start loading animation
 
             try {
                 const response = await axios.get('http://localhost:8000/api/messages', {
@@ -38,6 +41,8 @@ const Chat = () => {
                 setChat((prevChat) => [...response.data.data.reverse(), ...prevChat]);
             } catch (error) {
                 console.error('Failed to fetch messages', error);
+            } finally {
+                setLoading(false); // Stop loading animation
             }
         };
 
@@ -52,11 +57,17 @@ const Chat = () => {
         };
     }, [page]);
 
+    useEffect(() => {
+        if (chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    }, [chat]);
+
     const handleScroll = async () => {
-        if (chatBoxRef.current.scrollTop === 0 && !loading) {
-            setLoading(true);
+        if (chatBoxRef.current.scrollTop === 0 && !loadingMore) {
+            setLoadingMore(true);
             setPage((prevPage) => prevPage + 1);
-            setLoading(false);
+            setLoadingMore(false);
         }
     };
 
@@ -102,6 +113,7 @@ const Chat = () => {
                 onScroll={handleScroll}
                 className="chat-box"
             >
+                {loading && <div className="loading"></div>}
                 {chat.map((msg, index) => (
                     <div 
                         key={index} 
@@ -110,6 +122,7 @@ const Chat = () => {
                         <strong>{msg.user && msg.user.name ? msg.user.name : 'Unknown'}:</strong> {msg.msg}
                     </div>
                 ))}
+                {loadingMore && <div className="loading-more">Loading more...</div>}
             </div>
             <div className="input-container">
                 <input
