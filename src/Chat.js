@@ -24,13 +24,14 @@ const Chat = () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/messages', {
                     params: {
-                        group_id: "i2R5WNL55XaFYOX"
+                        groupId: "i2R5WNL55XaFYOX",
+                        page: 1,
                       },
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setChat(response.data);
+                setChat(response.data.data);
             } catch (error) {
                 console.error('Failed to fetch messages', error);
             }
@@ -62,7 +63,9 @@ const Chat = () => {
             }
 
             try {
-                socket.emit('sendChatToServer', messageData);
+                socket.connected ?
+                socket.emit('sendChatToServer', messageData):
+                alert("socket disconnected");
 
                 setChat((prevChat) => [...prevChat, messageData]);
                 
@@ -91,6 +94,7 @@ const Chat = () => {
                     padding: '10px',
                     marginBottom: '10px'
                 }}>
+                    {console.log(chat)}
                 {chat.map((msg, index) => (
                     <div key={index}>
                         {console.log(msg)}
