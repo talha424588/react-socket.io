@@ -9,7 +9,7 @@ const Login = ({ setAuthToken }) => {
 
     const login = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/api/login', {
+            const response = await axios.post('https://dev.vmchat.org/api/login', {
                 email,
                 password,
             });

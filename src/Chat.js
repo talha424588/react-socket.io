@@ -29,7 +29,7 @@ const Chat = () => {
             setLoading(true); // Start loading animation
 
             try {
-                const response = await axios.get('http://localhost:8000/api/messages', {
+                const response = await axios.get('https://dev.vmchat.org/api/messages', {
                     params: {
                         groupId: "i2R5WNL55XaFYOX",
                         page: page,
@@ -86,14 +86,17 @@ const Chat = () => {
             }
 
             try {
-                socket.connected ?
-                socket.emit('sendChatToServer', messageData) :
-                alert("socket disconnected");
+                if(socket.connected)
+                {
+                    socket.emit('sendChatToServer', messageData);
+                    setChat((prevChat) => [...prevChat, messageData]);
 
-                setChat((prevChat) => [...prevChat, messageData]);
+                }
+                else
+                    alert("socket disconnected");
 
                 setMessage('');
-                await axios.post('http://localhost:8000/api/messages', messageData, {
+                await axios.post('https://dev.vmchat.org/api/messages', messageData, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
