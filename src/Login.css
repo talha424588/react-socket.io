@@ -1,4 +1,4 @@
-/* src/Login.css */
+
 .login-container {
     display: flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
 html, body {
     height: 100%;
     margin: 0;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden; 
 }
 
 .login-box {

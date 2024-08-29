@@ -14,7 +14,7 @@ const Chat = () => {
     const [chat, setChat] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [loadingMore, setLoadingMore] = useState(false); // For loading more messages
+    const [loadingMore, setLoadingMore] = useState(false);
     const chatBoxRef = useRef(null);
     const userData = JSON.parse(localStorage.getItem('userData'));
 
@@ -26,7 +26,7 @@ const Chat = () => {
                 return;
             }
 
-            setLoading(true); // Start loading animation
+            setLoading(true);
 
             try {
                 const response = await axios.get('https://dev.vmchat.org/api/messages', {
@@ -42,7 +42,7 @@ const Chat = () => {
             } catch (error) {
                 console.error('Failed to fetch messages', error);
             } finally {
-                setLoading(false); // Stop loading animation
+                setLoading(false);
             }
         };
 
